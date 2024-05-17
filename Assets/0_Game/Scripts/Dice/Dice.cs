@@ -24,7 +24,7 @@ public class Dice : MonoBehaviour
     {
         if (_delayedCheck) return;
 
-        if (!_hasRotationStopped && _rigidbody.velocity.sqrMagnitude <= .1f)
+        if (!_hasRotationStopped && _rigidbody.velocity.sqrMagnitude <= .1f && _rigidbody.angularVelocity.sqrMagnitude <= .1f) 
         {
             _hasRotationStopped = true;
             GetRollResult();
@@ -48,12 +48,12 @@ public class Dice : MonoBehaviour
             }
         }
         _result.Invoke(currentSideIndex + 1);
-        // print("Top Side " + (currentSideIndex + 1));
+
     }
 
-    public void Throw(float throwForce, float rollForce, Action<int> result)
+    public void Throw(float throwForce, float rollForce, Action<int> onRollStopped)
     {
-        _result = result;
+        _result = onRollStopped;
         float randomValue = UnityEngine.Random.Range(-1f, 1f);
         _rigidbody.AddForce(transform.forward * (throwForce + randomValue), ForceMode.Impulse);
 
@@ -61,7 +61,6 @@ public class Dice : MonoBehaviour
         float randomY = UnityEngine.Random.Range(0, 1f);
         float randomZ = UnityEngine.Random.Range(0, 1f);
 
-        //_rigidbody.AddTorque(, ForceMode.Impulse);
         DelayedTorque(new Vector3(randomX, randomY, randomZ) * (rollForce + randomValue));
         Delay();
     }
