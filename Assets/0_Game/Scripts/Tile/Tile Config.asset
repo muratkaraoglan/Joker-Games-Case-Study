@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b833509fa3674c441b01bf38a771f86a, type: 3}
+  m_Name: Tile Config
+  m_EditorClassIdentifier: 
+  <TilePrefab>k__BackingField: {fileID: 893885289617401347, guid: 8ef46a760690c50408d512e822ee2dfb,
+    type: 3}
+  <TileSpawnOffset>k__BackingField: 2.15
+  <TileCountOnEdge>k__BackingField: 6
+  _tileTypes:
+  - Name: Empty
+    Type: 0
+    TileSprite: {fileID: 0}
+    MinAmount: 0
+    MaxAmount: 0
+  - Name: Apple
+    Type: 1
+    TileSprite: {fileID: -155878351, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
+    MinAmount: 0
+    MaxAmount: 5
+  - Name: Pear
+    Type: 2
+    TileSprite: {fileID: 118470503, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
+    MinAmount: -6
+    MaxAmount: 6
+  - Name: Strawberry
+    Type: 3
+    TileSprite: {fileID: 1853636591, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
+    MinAmount: 1
+    MaxAmount: 9
