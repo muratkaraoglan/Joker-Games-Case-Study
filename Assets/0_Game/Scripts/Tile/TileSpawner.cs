@@ -24,15 +24,16 @@ public class TileSpawner : MonoBehaviour
                 targetPosition = spawnDirections[i] * j * _tileConfig.TileSpawnOffset + spawnOffset;
 
                 Tile tile = Instantiate(_tileConfig.TilePrefab, targetPosition + Vector3.up * 2f, Quaternion.identity);
-
-                StartCoroutine(SpawnAnimation(tile.transform, tile.transform.position, targetPosition, _tileSpawnMoveTargetTime));
-
+                tile.name=count.ToString();
+                //StartCoroutine(SpawnAnimation(tile.transform, tile.transform.position, targetPosition, _tileSpawnMoveTargetTime));
                 Vector3 lookDirection = Quaternion.Euler(0, 90, 0) * spawnDirections[i];
 
                 bool isFirstItemInRow = j == 0;
                 if (isFirstItemInRow) lookDirection = Quaternion.Euler(0, 45, 0) * spawnDirections[i];
 
                 tile.Init(_tileConfig.GetRandomTile(), lookDirection, count, isFirstItemInRow);
+
+                Tween move = new MoveTween(tile.transform, tile.transform.position, targetPosition, _tileSpawnMoveTargetTime, Easing.Linear);
 
                 if (backTile != null)
                 {
@@ -41,17 +42,17 @@ public class TileSpawner : MonoBehaviour
                 else
                 {
                     firstTile = tile;
-                    firstTile.Reset();
+                    firstTile.Reset();//Starting tile set empty
                 }
                 backTile = tile;
                 yield return new WaitForSeconds(.1f);
-                //Transform tile = Instantiate(_tilePrefab, targetPosition, Quaternion.identity).transform;// for animation
-                //StartCoroutine(SpawnAnimation(tile, tile.position, targetPosition, _tileSpawnAnimatiomTime));// for animation
-                //yield return new WaitForSeconds(.2f);// for animation
+
             }
             spawnOffset = targetPosition + spawnDirections[i] * _tileConfig.TileSpawnOffset;
         }
         backTile.SetNextTile(firstTile);
+
+
     }
 
     IEnumerator SpawnAnimation(Transform target, Vector3 from, Vector3 to, float duration)
