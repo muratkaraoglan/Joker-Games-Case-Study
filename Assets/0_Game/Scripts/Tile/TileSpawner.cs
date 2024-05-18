@@ -5,10 +5,10 @@ using UnityEngine;
 public class TileSpawner : MonoBehaviour
 {
     [SerializeField] private TileTypeScriptableObject _tileConfig;
-    [SerializeField] private float _tileSpawnAnimatiomTime;
+    [SerializeField] private float _tileSpawnMoveTargetTime = .3f;
 
     Vector3[] spawnDirections = new Vector3[] { Vector3.forward, Vector3.right, Vector3.back, Vector3.left };
-    private void Start()
+    private IEnumerator Start()
     {
         //transform.position = new Vector3(_tileCountOnEdge, 2f, _tileCountOnEdge);// for animation
         Vector3 targetPosition = Vector3.zero;
@@ -23,7 +23,10 @@ public class TileSpawner : MonoBehaviour
                 count++;
                 targetPosition = spawnDirections[i] * j * _tileConfig.TileSpawnOffset + spawnOffset;
 
-                Tile tile = Instantiate(_tileConfig.TilePrefab, targetPosition, Quaternion.identity);
+                Tile tile = Instantiate(_tileConfig.TilePrefab, targetPosition + Vector3.up * 2f, Quaternion.identity);
+
+                StartCoroutine(SpawnAnimation(tile.transform, tile.transform.position, targetPosition, _tileSpawnMoveTargetTime));
+
                 Vector3 lookDirection = Quaternion.Euler(0, 90, 0) * spawnDirections[i];
 
                 bool isFirstItemInRow = j == 0;
@@ -41,6 +44,7 @@ public class TileSpawner : MonoBehaviour
                     firstTile.Reset();
                 }
                 backTile = tile;
+                yield return new WaitForSeconds(.1f);
                 //Transform tile = Instantiate(_tilePrefab, targetPosition, Quaternion.identity).transform;// for animation
                 //StartCoroutine(SpawnAnimation(tile, tile.position, targetPosition, _tileSpawnAnimatiomTime));// for animation
                 //yield return new WaitForSeconds(.2f);// for animation
