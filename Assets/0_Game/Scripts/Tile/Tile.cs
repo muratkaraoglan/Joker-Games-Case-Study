@@ -7,8 +7,10 @@ using UnityEngine.UI;
 public class Tile : MonoBehaviour
 {
     #region Serialized
+    [SerializeField] private Transform _canvasParent;
     [SerializeField] private Image _tileImage;
     [SerializeField] private TextMeshProUGUI _amountText;
+    [SerializeField] private TextMeshProUGUI _indexText;
     #endregion
 
     #region Private
@@ -16,9 +18,10 @@ public class Tile : MonoBehaviour
     private bool _isEmpty;
     private int _amount;
     #endregion
-    public void Init(TileTypeHolder tileTypeHolder,Vector3 direction)
+    public void Init(TileTypeHolder tileTypeHolder, Vector3 direction, int id)
     {
-        transform.forward = direction;
+        _canvasParent.forward = Quaternion.Euler(0, 90, 0) * direction;
+        _indexText.SetText(id .ToString());
         if (tileTypeHolder.Type == TileType.Empty)
         {
             _isEmpty = true;
@@ -30,6 +33,14 @@ public class Tile : MonoBehaviour
             _amount = Random.Range(tileTypeHolder.MinAmount, tileTypeHolder.MaxAmount + 1);
             _amountText.SetText(GameManager.Instance.GetColoredString(_amount));
         }
+    }
+
+    public void Reset()
+    {
+        _tileImage.sprite = null;
+        _tileImage.enabled = false;
+        _amountText.SetText("");
+        _isEmpty = true;
     }
 
     public void SetNextTile(Tile nextTile)

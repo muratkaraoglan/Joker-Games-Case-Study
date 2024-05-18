@@ -5,9 +5,7 @@ using UnityEngine;
 public class TileSpawner : MonoBehaviour
 {
     [SerializeField] private TileTypeScriptableObject _tileConfig;
-
     [SerializeField] private float _tileSpawnAnimatiomTime;
-
 
     Vector3[] spawnDirections = new Vector3[] { Vector3.forward, Vector3.right, Vector3.back, Vector3.left };
     private void Start()
@@ -17,14 +15,16 @@ public class TileSpawner : MonoBehaviour
         Vector3 spawnOffset = Vector3.zero;
         Tile backTile = null;
         Tile firstTile = null;
+        int count = 0;
         for (int i = 0; i < spawnDirections.Length; i++)
         {
             for (int j = 0; j < _tileConfig.TileCountOnEdge; j++)
             {
+                count++;
                 targetPosition = spawnDirections[i] * j * _tileConfig.TileSpawnOffset + spawnOffset;
 
                 Tile tile = Instantiate(_tileConfig.TilePrefab, targetPosition, Quaternion.identity);
-
+                tile.Init(_tileConfig.GetRandomTile(), spawnDirections[i], count);
                 if (backTile != null)
                 {
                     backTile.SetNextTile(tile);
@@ -32,6 +32,7 @@ public class TileSpawner : MonoBehaviour
                 else
                 {
                     firstTile = tile;
+                    firstTile.Reset();
                 }
                 backTile = tile;
                 //Transform tile = Instantiate(_tilePrefab, targetPosition, Quaternion.identity).transform;// for animation
@@ -39,7 +40,7 @@ public class TileSpawner : MonoBehaviour
                 //yield return new WaitForSeconds(.2f);// for animation
             }
             spawnOffset = targetPosition + spawnDirections[i] * _tileConfig.TileSpawnOffset;
-        }
+        } 
         backTile.SetNextTile(firstTile);
     }
 
