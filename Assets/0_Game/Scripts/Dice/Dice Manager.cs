@@ -43,7 +43,7 @@ public class DiceManager : MonoBehaviour
         for (int i = 0; i < _diceInitCount; i++)
         {
             Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
-            dice.Throw(_throwForce, _rollForce, (r) => { AddResult(r); });
+            dice.Throw(transform.forward.normalized, _throwForce, _rollForce, (r) => { AddResult(r); });
             _throwedDice.Add(dice.gameObject);
 
             await Task.Yield();

@@ -14,14 +14,16 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region Private
+    private TileType _type;
     private Tile _nextTile;
     private bool _isEmpty;
     private int _amount;
     #endregion
-    public void Init(TileTypeHolder tileTypeHolder, Vector3 direction, int id)
+    public void Init(TileTypeHolder tileTypeHolder, Vector3 direction, int id, bool isFirstTileInRow)
     {
-        _canvasParent.forward = Quaternion.Euler(0, 90, 0) * direction;
-        _indexText.SetText(id .ToString());
+        _canvasParent.forward = direction;
+        _indexText.SetText(id.ToString());
+        _type = tileTypeHolder.Type;
         if (tileTypeHolder.Type == TileType.Empty)
         {
             _isEmpty = true;
@@ -30,6 +32,7 @@ public class Tile : MonoBehaviour
         {
             _tileImage.sprite = tileTypeHolder.TileSprite;
             _tileImage.enabled = true;
+            if (isFirstTileInRow) _indexText.rectTransform.anchoredPosition = new Vector2(-.8f, .3f);
             _amount = Random.Range(tileTypeHolder.MinAmount, tileTypeHolder.MaxAmount + 1);
             _amountText.SetText(GameManager.Instance.GetColoredString(_amount));
         }

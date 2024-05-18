@@ -24,7 +24,13 @@ public class TileSpawner : MonoBehaviour
                 targetPosition = spawnDirections[i] * j * _tileConfig.TileSpawnOffset + spawnOffset;
 
                 Tile tile = Instantiate(_tileConfig.TilePrefab, targetPosition, Quaternion.identity);
-                tile.Init(_tileConfig.GetRandomTile(), spawnDirections[i], count);
+                Vector3 lookDirection = Quaternion.Euler(0, 90, 0) * spawnDirections[i];
+
+                bool isFirstItemInRow = j == 0;
+                if (isFirstItemInRow) lookDirection = Quaternion.Euler(0, 45, 0) * spawnDirections[i];
+
+                tile.Init(_tileConfig.GetRandomTile(), lookDirection, count, isFirstItemInRow);
+
                 if (backTile != null)
                 {
                     backTile.SetNextTile(tile);
@@ -40,7 +46,7 @@ public class TileSpawner : MonoBehaviour
                 //yield return new WaitForSeconds(.2f);// for animation
             }
             spawnOffset = targetPosition + spawnDirections[i] * _tileConfig.TileSpawnOffset;
-        } 
+        }
         backTile.SetNextTile(firstTile);
     }
 
