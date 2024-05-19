@@ -32,6 +32,7 @@ Transform:
   m_Children:
   - {fileID: 4139833641272126032}
   - {fileID: 3378853109445615390}
+  - {fileID: 4879191506618040465}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &893885289617401347
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db79269d1b427364abe93e1c8e43dcd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <TileMovePoint>k__BackingField: {fileID: 4879191506618040465}
   _canvasParent: {fileID: 3378853109445615390}
   _tileImage: {fileID: 6749506273771234156}
   _amountText: {fileID: 8431619777272130522}
@@ -229,6 +231,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3301478112742340289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4879191506618040465}
+  m_Layer: 0
+  m_Name: Tile Move Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4879191506618040465
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3301478112742340289}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.228, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7453754888387821395}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3542369859052249651
 GameObject:
   m_ObjectHideFlags: 0

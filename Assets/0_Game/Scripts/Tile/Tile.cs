@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Tile : MonoBehaviour
 {
     #region Serialized
+    [field: SerializeField] public Transform TileMovePoint { get; private set; }
     [SerializeField] private Transform _canvasParent;
     [SerializeField] private Image _tileImage;
     [SerializeField] private TextMeshProUGUI _amountText;
@@ -49,5 +50,12 @@ public class Tile : MonoBehaviour
     public void SetNextTile(Tile nextTile)
     {
         _nextTile = nextTile;
+    }
+
+    public Tile Next => _nextTile;
+
+    public void GetPrize()
+    {
+        print("Prize");
     }
 }

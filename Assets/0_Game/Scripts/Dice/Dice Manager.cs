@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
-public class DiceManager : MonoBehaviour
+public class DiceManager : Singelton<DiceManager>
 {
+    public event Action<int> OnRollComplete = _ => { };
+
     [SerializeField] private Dice _dicePrefab;
     [SerializeField] private int _diceInitCount = 2;// for test
     [SerializeField] private float _throwForce = 3;
     [SerializeField] private float _rollForce = 3;
 
-    private List<int> resultList = new List<int>();
-    [SerializeField] private List<GameObject> _throwedDice = new List<GameObject>();
+    private List<int> _resultList = new List<int>();
+    private List<GameObject> _throwedDice = new List<GameObject>();
     // for test
     private void Update()
     {
@@ -24,12 +27,13 @@ public class DiceManager : MonoBehaviour
 
     void AddResult(int result)
     {
-        resultList.Add(result);
+        _resultList.Add(result);
 
-        if (resultList.Count == _diceInitCount)
+        if (_resultList.Count == _diceInitCount)
         {
-            print("Result: " + resultList.Sum());
-            resultList.Clear();
+            print("Result: " + _resultList.Sum());
+            OnRollComplete.Invoke(_resultList.Sum());
+            _resultList.Clear();
         }
     }
 

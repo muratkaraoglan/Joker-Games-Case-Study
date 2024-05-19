@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-9)]
 public class TileSpawner : MonoBehaviour
 {
     [SerializeField] private TileTypeScriptableObject _tileConfig;
     [SerializeField] private float _tileSpawnMoveTargetTime = .3f;
 
+    Tile firstTile = null;
     Vector3[] spawnDirections = new Vector3[] { Vector3.forward, Vector3.right, Vector3.back, Vector3.left };
     private IEnumerator Start()
     {
@@ -14,7 +16,7 @@ public class TileSpawner : MonoBehaviour
         Vector3 targetPosition = Vector3.zero;
         Vector3 spawnOffset = Vector3.zero;
         Tile backTile = null;
-        Tile firstTile = null;
+
         int count = 0;
         for (int i = 0; i < spawnDirections.Length; i++)
         {
@@ -24,8 +26,7 @@ public class TileSpawner : MonoBehaviour
                 targetPosition = spawnDirections[i] * j * _tileConfig.TileSpawnOffset + spawnOffset;
 
                 Tile tile = Instantiate(_tileConfig.TilePrefab, targetPosition + Vector3.up * 2f, Quaternion.identity);
-                tile.name=count.ToString();
-                //StartCoroutine(SpawnAnimation(tile.transform, tile.transform.position, targetPosition, _tileSpawnMoveTargetTime));
+                tile.name = count.ToString();
                 Vector3 lookDirection = Quaternion.Euler(0, 90, 0) * spawnDirections[i];
 
                 bool isFirstItemInRow = j == 0;
@@ -55,17 +56,6 @@ public class TileSpawner : MonoBehaviour
 
     }
 
-    IEnumerator SpawnAnimation(Transform target, Vector3 from, Vector3 to, float duration)
-    {
-        float elapsedTime = 0;
-        while (elapsedTime <= duration)
-        {
-            target.position = Vector3.Lerp(from, to, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        target.position = to;
-    }
-
+    public Tile FirstTile => firstTile;
 
 }
