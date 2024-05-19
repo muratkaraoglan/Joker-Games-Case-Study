@@ -15,6 +15,7 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region Private
+    private Animator _animator;
     private TileType _type;
     private Tile _nextTile;
     private bool _isEmpty;
@@ -37,6 +38,7 @@ public class Tile : MonoBehaviour
             _amount = Random.Range(tileTypeHolder.MinAmount, tileTypeHolder.MaxAmount + 1);
             _amountText.SetText(GameManager.Instance.GetColoredString(_amount));
         }
+        _animator = GetComponent<Animator>();
     }
 
     public void Reset()
@@ -56,6 +58,7 @@ public class Tile : MonoBehaviour
 
     public void GetPrize()
     {
+        _animator.Play("Interaction", -1, 0f);
         if (_isEmpty) return;
         DataManager.Instance.UpdateTileData(_type, _amount);
     }
