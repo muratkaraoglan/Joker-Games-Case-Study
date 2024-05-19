@@ -20,10 +20,9 @@ public class JumpTween : Tween
         float t = Mathf.Clamp01(elapsedTime / Duration);
         t = Ease(t);
 
-        // Calculate horizontal and vertical positions
         Vector3 horizontalPosition = Vector3.Lerp(StartPosition, EndPosition, t);
-        float parabolicT = t * 2 - 1; // Transforms t to range [-1, 1]
-        float verticalOffset = -parabolicT * parabolicT + 1; // Parabolic curve
+        float parabolicT = t * 2 - 1; 
+        float verticalOffset = -parabolicT * parabolicT + 1; 
         Vector3 finalPosition = new Vector3(horizontalPosition.x, horizontalPosition.y + verticalOffset * _jumpHeight, horizontalPosition.z);
 
         Target.position = finalPosition;

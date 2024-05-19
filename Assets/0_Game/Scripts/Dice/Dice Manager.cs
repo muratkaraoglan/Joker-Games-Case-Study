@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-
+[DefaultExecutionOrder(-1)]
 public class DiceManager : Singelton<DiceManager>
 {
     public event Action<int> OnRollComplete = _ => { };
@@ -28,10 +28,10 @@ public class DiceManager : Singelton<DiceManager>
     // for test
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Roll();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    Roll();
+        //}
     }
 
     void AddResult(int result)
@@ -92,4 +92,5 @@ public class DiceManager : Singelton<DiceManager>
         //}
 
     }
+    public void DiceRoll() => Roll();
 }

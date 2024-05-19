@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour
 {
+    public event Action OnMoveCompleteEvent = () => { };
+    [SerializeField] protected float _moveTime = 1f;
     protected int _moveCount;
     protected Tile _currentTile;
     public abstract void Idle();
@@ -11,10 +14,14 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        DiceManager.Instance.OnRollComplete += OnRollComplete;
-        _currentTile = FindObjectOfType<TileSpawner>().FirstTile;
+      
+        _currentTile = TileSpawner.Instance.FirstTile;
         transform.position = _currentTile.TileMovePoint.position;
         Idle();
+    }
+    private void OnEnable()
+    {
+        DiceManager.Instance.OnRollComplete += OnRollComplete;
     }
 
     protected void OnRollComplete(int rollResult)
@@ -32,6 +39,7 @@ public abstract class PlayerBase : MonoBehaviour
         else
         {
             Idle();
+            OnMoveCompleteEvent.Invoke();
             //Roll butonunu ac
         }
     }

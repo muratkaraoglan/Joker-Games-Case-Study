@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [DefaultExecutionOrder(-9)]
-public class TileSpawner : MonoBehaviour
+public class TileSpawner : Singelton<TileSpawner>
 {
+    public event Action OnTileOrderFinished = () => { };
+
     [SerializeField] private TileTypeScriptableObject _tileConfig;
     [SerializeField] private float _tileSpawnMoveTargetTime = .3f;
 
@@ -52,7 +55,7 @@ public class TileSpawner : MonoBehaviour
             spawnOffset = targetPosition + spawnDirections[i] * _tileConfig.TileSpawnOffset;
         }
         backTile.SetNextTile(firstTile);
-
+        OnTileOrderFinished.Invoke();
 
     }
 

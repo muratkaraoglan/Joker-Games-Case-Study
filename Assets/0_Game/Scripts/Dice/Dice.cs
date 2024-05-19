@@ -34,7 +34,6 @@ public class Dice : MonoBehaviour
         }
     }
 
-    [ContextMenu("Top Side")]
     private void GetRollResult()
     {
         if (_diceSides.Length == 0) return;
