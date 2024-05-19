@@ -56,6 +56,7 @@ public class Tile : MonoBehaviour
 
     public void GetPrize()
     {
-        print("Prize");
+        if (_isEmpty) return;
+        DataManager.Instance.UpdateTileData(_type, _amount);
     }
 }

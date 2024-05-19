@@ -16,6 +16,7 @@ public class TileTypeScriptableObject : ScriptableObject
     {
         return _tileTypes[UnityEngine.Random.Range(0, _tileTypes.Count)];
     }
+    public List<TileTypeHolder> TileTypeHolderList => _tileTypes;
 }
 
 [Serializable]

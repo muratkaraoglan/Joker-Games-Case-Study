@@ -60,5 +60,6 @@ public class TileSpawner : Singelton<TileSpawner>
     }
 
     public Tile FirstTile => firstTile;
+    public TileTypeScriptableObject TileConfig => _tileConfig;
 
 }

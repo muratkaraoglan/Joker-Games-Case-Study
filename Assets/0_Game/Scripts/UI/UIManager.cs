@@ -14,22 +14,20 @@ public class UIManager : Singelton<UIManager>
     {
         TileSpawner.Instance.OnTileOrderFinished += OnTileOrderFinished;
         DiceManager.Instance.OnRollComplete += OnRollComplete;
-        //_player = FindObjectOfType<PlayerBase>();
-        //_player.OnMoveCompleteEvent += OnMoveCompleteEvent;
     }
 
     private void OnDisable()
     {
         TileSpawner.Instance.OnTileOrderFinished -= OnTileOrderFinished;
         DiceManager.Instance.OnRollComplete -= OnRollComplete;
-        //_player.OnMoveCompleteEvent -= OnMoveCompleteEvent;
+        _player.OnMoveCompleteEvent -= OnMoveCompleteEvent;
     }
 
     private void OnTileOrderFinished()
     {
         _playerSelectorGameObject.SetActive(true);
         _playerParentTransform.gameObject.SetActive(true);
-        //open inventory
+
     }
     private void OnRollComplete(int moveCount)
     {
@@ -40,7 +38,6 @@ public class UIManager : Singelton<UIManager>
     private void OnMoveCompleteEvent()
     {
         _throwButtonGameObject.SetActive(true);
-        //Open Inventory
     }
 
     public void OnRollButtonClicked()
