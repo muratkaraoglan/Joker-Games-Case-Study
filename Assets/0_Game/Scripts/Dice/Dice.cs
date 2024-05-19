@@ -13,18 +13,21 @@ public class Dice : MonoBehaviour
     private bool _delayedCheck;
     private bool _hasRotationStopped;
 
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
     private void OnEnable()
     {
         _delayedCheck = true;
-        _rigidbody = GetComponent<Rigidbody>();
+        _hasRotationStopped = false;
     }
-
 
     private void Update()
     {
         if (_delayedCheck) return;
 
-        if (!_hasRotationStopped && _rigidbody.velocity.sqrMagnitude <= .1f && _rigidbody.angularVelocity.sqrMagnitude <= .1f)
+        if (!_hasRotationStopped && _rigidbody.velocity.sqrMagnitude <= .1f && _rigidbody.angularVelocity.sqrMagnitude <= .001f)
         {
             _hasRotationStopped = true;
             GetRollResult();
@@ -53,6 +56,8 @@ public class Dice : MonoBehaviour
 
     public void Throw(Vector3 forceDirection, float throwForce, float rollForce, Action<int> onRollStopped)
     {
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
         _result = onRollStopped;
         float randomValue = UnityEngine.Random.Range(-1f, 1f);
         _rigidbody.AddForce(forceDirection * (throwForce + randomValue), ForceMode.Impulse);
@@ -73,7 +78,6 @@ public class Dice : MonoBehaviour
 
     private async void Delay()
     {
-
         await Task.Delay(1000);
         _delayedCheck = false;
     }

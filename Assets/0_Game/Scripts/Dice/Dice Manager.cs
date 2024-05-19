@@ -15,7 +15,16 @@ public class DiceManager : Singelton<DiceManager>
     [SerializeField] private float _rollForce = 3;
 
     private List<int> _resultList = new List<int>();
-    private List<GameObject> _throwedDice = new List<GameObject>();
+    private List<Dice> _dicePool = new List<Dice>();
+
+    private void Start()
+    {
+        for (int i = 0; i < _diceInitCount; i++)
+        {
+            Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
+            _dicePool.Add(dice);
+        }
+    }
     // for test
     private void Update()
     {
@@ -41,21 +50,46 @@ public class DiceManager : Singelton<DiceManager>
     {
         if (_dicePrefab == null) return;
 
-        _throwedDice.ForEach(dice => Destroy(dice));
-        _throwedDice.Clear();
+        _dicePool.ForEach(dice => dice.gameObject.SetActive(false));
+        //_throwedDice.Clear();
+
+        if (_diceInitCount > _dicePool.Count)
+        {
+            int diff = _diceInitCount - _dicePool.Count;
+            for (int i = 0; i < diff; i++)
+            {
+                Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
+                _dicePool.Add(dice);
+            }
+        }
 
         for (int i = 0; i < _diceInitCount; i++)
         {
-            Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
+            Dice dice = _dicePool[i];
+            dice.transform.position = transform.position;
+            dice.transform.rotation = Quaternion.identity;
+            dice.gameObject.SetActive(true);
             dice.Throw(transform.forward.normalized, _throwForce, _rollForce, (r) => { AddResult(r); });
-            _throwedDice.Add(dice.gameObject);
-
-            await Task.Yield();
-            await Task.Yield();
-            await Task.Yield();
-            await Task.Yield();
-            await Task.Yield();
+            await Task.Delay(10);
+            //await Task.Yield();
+            //await Task.Yield();
+            //await Task.Yield();
+            //await Task.Yield();
+            //await Task.Yield();
         }
+
+        //for (int i = 0; i < _diceInitCount; i++)
+        //{
+        //    Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
+        //    dice.Throw(transform.forward.normalized, _throwForce, _rollForce, (r) => { AddResult(r); });
+        //    _dicePool.Add(dice);
+
+        //    await Task.Yield();
+        //    await Task.Yield();
+        //    await Task.Yield();
+        //    await Task.Yield();
+        //    await Task.Yield();
+        //}
 
     }
 }
