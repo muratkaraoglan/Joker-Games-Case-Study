@@ -8,23 +8,27 @@ using UnityEngine;
 public class Dice : MonoBehaviour
 {
     [SerializeField] private Transform[] _diceSides;
-    Action<int> _result;
+
+    private Action<int> _result;
     private Rigidbody _rigidbody;
     private bool _delayedCheck;
     private bool _hasRotationStopped;
-
+    private bool _isRiggedDice;
+    private int _desiredFace = -1;
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
     private void OnEnable()
     {
+        _rigidbody.constraints = RigidbodyConstraints.None;
         _delayedCheck = true;
         _hasRotationStopped = false;
     }
 
     private void Update()
     {
+        if (_isRiggedDice) return;
         if (_delayedCheck) return;
 
         if (!_hasRotationStopped && _rigidbody.velocity.sqrMagnitude <= .1f && _rigidbody.angularVelocity.sqrMagnitude <= .001f)
@@ -53,8 +57,11 @@ public class Dice : MonoBehaviour
 
     }
 
-    public void Throw(Vector3 forceDirection, float throwForce, float rollForce, Action<int> onRollStopped)
+    public void Throw(Vector3 forceDirection, float throwForce, float rollForce, int desiredDiceFace, Action<int> onRollStopped)
     {
+        print(desiredDiceFace);
+        _isRiggedDice = desiredDiceFace != -1;
+        _desiredFace = desiredDiceFace;
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
         _result = onRollStopped;
@@ -69,6 +76,11 @@ public class Dice : MonoBehaviour
         Delay();
     }
 
+    public Quaternion DesiredFaceToRotation(int desiredFace)
+    {
+        return Quaternion.FromToRotation((_diceSides[desiredFace - 1].position - transform.position).normalized, Vector3.up) * transform.rotation;
+    }
+
     private async void DelayedTorque(Vector3 torque)
     {
         await Task.Delay(100);
@@ -80,5 +92,39 @@ public class Dice : MonoBehaviour
         await Task.Delay(1000);
         _delayedCheck = false;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_isRiggedDice)
+        {
+            if (!collision.collider.name.Contains("Dice"))
+            {
+
+                StartCoroutine(FromToRotation(DesiredFaceToRotation(_desiredFace)));
+                _isRiggedDice = false;
+
+            }
+        }
+    }
+    IEnumerator FromToRotation(Quaternion targetRotation)
+    {
+        yield return new WaitForSeconds(1f);
+
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        _rigidbody.angularVelocity = Vector3.zero;
+
+        float rotationSpeed = 1f;
+
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
+        {
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime * 360);
+            yield return null;
+            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            //yield return null;
+        }
+       
+    }
+
 
 }

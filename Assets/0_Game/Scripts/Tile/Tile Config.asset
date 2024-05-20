@@ -25,15 +25,15 @@ MonoBehaviour:
   - Name: Apple
     Type: 1
     TileSprite: {fileID: -155878351, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
-    MinAmount: 0
-    MaxAmount: 5
+    MinAmount: 1
+    MaxAmount: 12
   - Name: Pear
     Type: 2
     TileSprite: {fileID: 118470503, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
-    MinAmount: -6
-    MaxAmount: 6
+    MinAmount: 1
+    MaxAmount: 9
   - Name: Strawberry
     Type: 3
     TileSprite: {fileID: 1853636591, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
     MinAmount: 1
-    MaxAmount: 9
+    MaxAmount: 15

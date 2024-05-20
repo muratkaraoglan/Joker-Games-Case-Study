@@ -46,7 +46,7 @@ public class DiceManager : Singelton<DiceManager>
         }
     }
 
-    private async void Roll()
+    private async void Roll(List<int> diceFaces)
     {
         if (_dicePrefab == null) return;
 
@@ -69,28 +69,15 @@ public class DiceManager : Singelton<DiceManager>
             dice.transform.position = transform.position;
             dice.transform.rotation = Quaternion.identity;
             dice.gameObject.SetActive(true);
-            dice.Throw(transform.forward.normalized, _throwForce, _rollForce, (r) => { AddResult(r); });
+            dice.Throw(transform.forward.normalized, _throwForce, _rollForce, diceFaces[i], (r) => { AddResult(r); });
             await Task.Delay(10);
-            //await Task.Yield();
-            //await Task.Yield();
-            //await Task.Yield();
-            //await Task.Yield();
-            //await Task.Yield();
         }
-
-        //for (int i = 0; i < _diceInitCount; i++)
-        //{
-        //    Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
-        //    dice.Throw(transform.forward.normalized, _throwForce, _rollForce, (r) => { AddResult(r); });
-        //    _dicePool.Add(dice);
-
-        //    await Task.Yield();
-        //    await Task.Yield();
-        //    await Task.Yield();
-        //    await Task.Yield();
-        //    await Task.Yield();
-        //}
+        diceFaces = null;
 
     }
-    public void DiceRoll() => Roll();
+    public void DiceRoll(int firstDiceFace, int secondDiceFace)
+    {
+        List<int> diceFaces = new List<int>() { firstDiceFace, secondDiceFace };
+        Roll(diceFaces);
+    }
 }

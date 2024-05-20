@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
@@ -8,6 +9,8 @@ public class UIManager : Singelton<UIManager>
     [SerializeField] private GameObject _throwButtonGameObject;
     [SerializeField] private GameObject _playerSelectorGameObject;
     [SerializeField] private Transform _playerParentTransform;
+    [SerializeField] private TextMeshProUGUI _firstDiceValueText;
+    [SerializeField] private TextMeshProUGUI _secondDiceValueText;
     private PlayerBase _player;
     private int _playerIndex;
     private void OnEnable()
@@ -43,7 +46,14 @@ public class UIManager : Singelton<UIManager>
     public void OnRollButtonClicked()
     {
         _throwButtonGameObject.SetActive(false);
-        DiceManager.Instance.DiceRoll();
+        int first, second;
+
+        first = _firstDiceValueText.text[0] - '0';
+        second = _secondDiceValueText.text[0] - '0';
+        first = first > 6 ? -1 : first;
+        second = second > 6 ? -1 : second;
+
+        DiceManager.Instance.DiceRoll(first, second);
     }
 
     public void OnPlayerSelected()
@@ -60,9 +70,10 @@ public class UIManager : Singelton<UIManager>
     {
         _playerParentTransform.GetChild(_playerIndex).gameObject.SetActive(false);
         _playerIndex += direction;
-        if(_playerIndex < 0 )  _playerIndex = _playerParentTransform.childCount - 1; 
-        else if(_playerIndex>=_playerParentTransform.childCount) _playerIndex = 0;
+        if (_playerIndex < 0) _playerIndex = _playerParentTransform.childCount - 1;
+        else if (_playerIndex >= _playerParentTransform.childCount) _playerIndex = 0;
 
         _playerParentTransform.GetChild(_playerIndex).gameObject.SetActive(true);
     }
+
 }
