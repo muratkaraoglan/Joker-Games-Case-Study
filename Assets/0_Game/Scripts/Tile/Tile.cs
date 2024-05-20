@@ -58,8 +58,13 @@ public class Tile : MonoBehaviour
 
     public void GetPrize()
     {
-        _animator.Play("Interaction", -1, 0f);
+      
         if (_isEmpty) return;
         DataManager.Instance.UpdateTileData(_type, _amount);
+    }
+
+    public void PlayInteractionAnimation()
+    {
+        _animator.Play("Interaction", -1, 0f);
     }
 }

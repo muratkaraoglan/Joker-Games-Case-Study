@@ -14,7 +14,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-      
+
         _currentTile = TileSpawner.Instance.FirstTile;
         transform.position = _currentTile.TileMovePoint.position;
         Idle();
@@ -33,14 +33,14 @@ public abstract class PlayerBase : MonoBehaviour
     protected void OnMoveComplete()
     {
         _currentTile = _currentTile.Next;
-        _currentTile.GetPrize();
+        _currentTile.PlayInteractionAnimation();
         _moveCount--;
         if (_moveCount != 0) Move();
         else
         {
             Idle();
             OnMoveCompleteEvent.Invoke();
-            //Roll butonunu ac
+            _currentTile.GetPrize();
         }
     }
 
