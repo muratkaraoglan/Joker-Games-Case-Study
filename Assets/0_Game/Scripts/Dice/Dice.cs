@@ -54,17 +54,20 @@ public class Dice : MonoBehaviour
             }
         }
         _result.Invoke(currentSideIndex + 1);
-
+        _rigidbody.velocity= Vector3.zero;
+        _rigidbody.angularVelocity= Vector3.zero;
     }
 
     public void Throw(Vector3 forceDirection, float throwForce, float rollForce, int desiredDiceFace, Action<int> onRollStopped)
     {
-        print(desiredDiceFace);
         _isRiggedDice = desiredDiceFace != -1;
         _desiredFace = desiredDiceFace;
+
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
+
         _result = onRollStopped;
+
         float randomValue = UnityEngine.Random.Range(-1f, 1f);
         _rigidbody.AddForce(forceDirection * (throwForce + randomValue), ForceMode.Impulse);
 
@@ -99,10 +102,8 @@ public class Dice : MonoBehaviour
         {
             if (!collision.collider.name.Contains("Dice"))
             {
-
                 StartCoroutine(FromToRotation(DesiredFaceToRotation(_desiredFace)));
                 _isRiggedDice = false;
-
             }
         }
     }
@@ -117,11 +118,9 @@ public class Dice : MonoBehaviour
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
         {
-
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime * 360);
             yield return null;
-            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            //yield return null;
+
         }
        
     }

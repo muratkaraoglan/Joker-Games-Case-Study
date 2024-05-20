@@ -7,10 +7,14 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class UIManager : Singelton<UIManager>
 {
     [SerializeField] private GameObject _throwButtonGameObject;
+    [Header("Player Selection")]
     [SerializeField] private GameObject _playerSelectorGameObject;
     [SerializeField] private Transform _playerParentTransform;
+    [Header("Dice Input")]
+    [SerializeField] private GameObject _inputHolderGameObject;
     [SerializeField] private TextMeshProUGUI _firstDiceValueText;
     [SerializeField] private TextMeshProUGUI _secondDiceValueText;
+
     private PlayerBase _player;
     private int _playerIndex;
     private void OnEnable()
@@ -63,6 +67,7 @@ public class UIManager : Singelton<UIManager>
         _player = _playerParentTransform.GetChild(_playerIndex).GetComponent<PlayerBase>();
         _player.OnMoveCompleteEvent += OnMoveCompleteEvent;
         _playerParentTransform.GetChild(_playerIndex).SetParent(null);
+        _inputHolderGameObject.SetActive(true );
         Destroy(_playerParentTransform.gameObject);
     }
 
