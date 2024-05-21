@@ -27,6 +27,9 @@ public class Tile : MonoBehaviour
         _canvasParent.forward = direction;
         _indexText.SetText(id.ToString());
         _type = tileTypeHolder.Type;
+
+        if (isFirstTileInRow) _indexText.rectTransform.anchoredPosition = new Vector2(-.8f, .3f);
+
         if (tileTypeHolder.Type == TileType.Empty)
         {
             _isEmpty = true;
@@ -35,7 +38,7 @@ public class Tile : MonoBehaviour
         {
             _tileImage.sprite = tileTypeHolder.TileSprite;
             _tileImage.enabled = true;
-            if (isFirstTileInRow) _indexText.rectTransform.anchoredPosition = new Vector2(-.8f, .3f);
+          
             _amount = Random.Range(tileTypeHolder.MinAmount, tileTypeHolder.MaxAmount + 1);
             _amountText.SetText(GameManager.Instance.GetColoredString(_amount));
             _collectParticle = Instantiate(tileTypeHolder.TileCollectParticlePrefab, transform);
