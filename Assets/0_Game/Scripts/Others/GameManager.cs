@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using Cinemachine;
+using System.Threading.Tasks;
 
 public class GameManager : Singelton<GameManager>
 {
@@ -9,6 +11,7 @@ public class GameManager : Singelton<GameManager>
     [SerializeField] private Color _positiveColor;
     [SerializeField] private Color _negativeColor;
     [SerializeField] private Color _defaultColor = Color.black;
+    [SerializeField] private CinemachineVirtualCamera _virtualCamera;
     #endregion
 
     #region private
@@ -17,6 +20,9 @@ public class GameManager : Singelton<GameManager>
     private string _defaultColorString;
     private string _coloredStringEnd;
     private StringBuilder _stringBuilder = new StringBuilder();
+    private CinemachineBasicMultiChannelPerlin _multiChannelPerlin;
+    private PlayerBase _player;
+    private bool _isCameraShaking;
     #endregion
 
     protected override void Awake()
@@ -26,6 +32,24 @@ public class GameManager : Singelton<GameManager>
         _negativeColorString = "<color=#" + ColorUtility.ToHtmlStringRGBA(_negativeColor) + ">";
         _defaultColorString = "<color=#" + ColorUtility.ToHtmlStringRGBA(_defaultColor) + ">";
         _coloredStringEnd = "</color>";
+        _multiChannelPerlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();     
+    }
+
+    private void Start()
+    {
+        DiceManager.Instance.OnDiceCollide += OnDiceCollide;
+    }
+
+    private async void OnDiceCollide()
+    {
+        if (_isCameraShaking) return;
+        _isCameraShaking = true;
+        _multiChannelPerlin.m_AmplitudeGain = 1;
+        _multiChannelPerlin.m_FrequencyGain = 1;
+        await Task.Delay(500);
+        _multiChannelPerlin.m_AmplitudeGain = 0;
+        _multiChannelPerlin.m_FrequencyGain = 0;
+        _isCameraShaking = false;
     }
 
     public string GetColoredString(int value)
@@ -49,4 +73,6 @@ public class GameManager : Singelton<GameManager>
         return _stringBuilder.ToString();
 
     }
+
+
 }

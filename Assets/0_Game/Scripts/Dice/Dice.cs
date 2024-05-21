@@ -107,7 +107,7 @@ public class Dice : MonoBehaviour
             if (_isRiggedDice)
             {
                 StartCoroutine(FromToRotation(DesiredFaceToRotation(_desiredFace)));
-              
+                _isRiggedDice = false;
             }
             if (!_isAudioClipPlayed)
             {
@@ -132,6 +132,6 @@ public class Dice : MonoBehaviour
             yield return null;
 
         }
-        _isRiggedDice = false;
+      
     }
 }
