@@ -25,14 +25,6 @@ public class DiceManager : Singelton<DiceManager>
             _dicePool.Add(dice);
         }
     }
-    // for test
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    Roll();
-        //}
-    }
 
     void AddResult(int result)
     {

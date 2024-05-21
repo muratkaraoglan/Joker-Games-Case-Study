@@ -121,9 +121,6 @@ public class Dice : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime * 360);
             yield return null;
 
-        }
-       
+        }    
     }
-
-
 }
