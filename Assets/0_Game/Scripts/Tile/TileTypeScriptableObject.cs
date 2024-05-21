@@ -10,6 +10,7 @@ public class TileTypeScriptableObject : ScriptableObject
     [field: SerializeField] public float TileSpawnOffset { get; private set; }
     [field: SerializeField, Min(2)] public int TileCountOnEdge { get; private set; }
 
+
     [SerializeField] private List<TileTypeHolder> _tileTypes;
 
     public TileTypeHolder GetRandomTile()
@@ -27,6 +28,7 @@ public struct TileTypeHolder
     public Sprite TileSprite;
     public int MinAmount;
     public int MaxAmount;
+    public ParticleSystem TileCollectParticlePrefab;
 }
 
 public enum TileType

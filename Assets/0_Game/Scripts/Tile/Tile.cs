@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour
 
     #region Private
     private Animator _animator;
+    private ParticleSystem _collectParticle;
     private TileType _type;
     private Tile _nextTile;
     private bool _isEmpty;
@@ -37,6 +38,7 @@ public class Tile : MonoBehaviour
             if (isFirstTileInRow) _indexText.rectTransform.anchoredPosition = new Vector2(-.8f, .3f);
             _amount = Random.Range(tileTypeHolder.MinAmount, tileTypeHolder.MaxAmount + 1);
             _amountText.SetText(GameManager.Instance.GetColoredString(_amount));
+            _collectParticle = Instantiate(tileTypeHolder.TileCollectParticlePrefab, transform);
         }
         _animator = GetComponent<Animator>();
     }
@@ -47,6 +49,7 @@ public class Tile : MonoBehaviour
         _tileImage.enabled = false;
         _amountText.SetText("");
         _isEmpty = true;
+        _collectParticle = null;
     }
 
     public void SetNextTile(Tile nextTile)
@@ -58,8 +61,8 @@ public class Tile : MonoBehaviour
 
     public void GetPrize()
     {
-      
         if (_isEmpty) return;
+        _collectParticle.Play();
         DataManager.Instance.UpdateTileData(_type, _amount);
     }
 

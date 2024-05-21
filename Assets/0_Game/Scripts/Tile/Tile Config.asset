@@ -22,18 +22,25 @@ MonoBehaviour:
     TileSprite: {fileID: 0}
     MinAmount: 0
     MaxAmount: 0
+    TileCollectParticlePrefab: {fileID: 0}
   - Name: Apple
     Type: 1
     TileSprite: {fileID: -155878351, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
     MinAmount: 1
     MaxAmount: 12
+    TileCollectParticlePrefab: {fileID: 1649810928455492445, guid: 6a69e9689897c8448bc6ae27f4ccb5df,
+      type: 3}
   - Name: Pear
     Type: 2
     TileSprite: {fileID: 118470503, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
     MinAmount: 1
     MaxAmount: 9
+    TileCollectParticlePrefab: {fileID: 4749357976156459231, guid: ee28a78f8b2908645bbbac5d9e1e7010,
+      type: 3}
   - Name: Strawberry
     Type: 3
     TileSprite: {fileID: 1853636591, guid: e7c5f44653b3a2640b13205de588807f, type: 3}
     MinAmount: 1
     MaxAmount: 15
+    TileCollectParticlePrefab: {fileID: 3873429926289762928, guid: c14eb524c1538574291849aca7bbd65f,
+      type: 3}
