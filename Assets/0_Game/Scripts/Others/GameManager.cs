@@ -32,13 +32,29 @@ public class GameManager : Singelton<GameManager>
         _negativeColorString = "<color=#" + ColorUtility.ToHtmlStringRGBA(_negativeColor) + ">";
         _defaultColorString = "<color=#" + ColorUtility.ToHtmlStringRGBA(_defaultColor) + ">";
         _coloredStringEnd = "</color>";
-        _multiChannelPerlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();     
+        _multiChannelPerlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        StartCoroutine(ChangeFOV(TileSpawner.Instance.TileConfig.TileCountOnEdge * 5 + 5, .5f));
     }
 
     private void Start()
     {
         DiceManager.Instance.OnDiceCollide += OnDiceCollide;
     }
+
+    IEnumerator ChangeFOV(float endFOV, float duration)
+    {
+        float startFOV = _virtualCamera.m_Lens.FieldOfView;
+        float elapsed = 0;
+        while (elapsed < duration)
+        {
+            float currentFOV = Mathf.Lerp(startFOV, endFOV, elapsed / duration);
+            _virtualCamera.m_Lens.FieldOfView = currentFOV;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
 
     private async void OnDiceCollide()
     {
