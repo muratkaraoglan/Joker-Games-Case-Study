@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,8 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class UIManager : Singelton<UIManager>
 {
+    public event Action<PlayerBase> OnPlayerSelectedEvent = _ => { };
+
     [SerializeField] private GameObject _throwButtonGameObject;
     [Header("Player Selection")]
     [SerializeField] private GameObject _playerSelectorGameObject;
@@ -42,7 +45,7 @@ public class UIManager : Singelton<UIManager>
         //Close Inventory
     }
 
-    private void OnMoveCompleteEvent()
+    private void OnMoveCompleteEvent(bool hasPrize)
     {
         _throwButtonGameObject.SetActive(true);
     }
@@ -67,8 +70,9 @@ public class UIManager : Singelton<UIManager>
         _player = _playerParentTransform.GetChild(_playerIndex).GetComponent<PlayerBase>();
         _player.OnMoveCompleteEvent += OnMoveCompleteEvent;
         _playerParentTransform.GetChild(_playerIndex).SetParent(null);
-        _inputHolderGameObject.SetActive(true );
+        _inputHolderGameObject.SetActive(true);
         Destroy(_playerParentTransform.gameObject);
+        OnPlayerSelectedEvent.Invoke(_player);
     }
 
     public void PlayerSelectDirectionButtonClicked(int direction)
@@ -80,5 +84,4 @@ public class UIManager : Singelton<UIManager>
 
         _playerParentTransform.GetChild(_playerIndex).gameObject.SetActive(true);
     }
-
 }

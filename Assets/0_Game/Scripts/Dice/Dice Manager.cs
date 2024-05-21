@@ -8,6 +8,7 @@ using System;
 public class DiceManager : Singelton<DiceManager>
 {
     public event Action<int> OnRollComplete = _ => { };
+    public event Action OnDiceCollide = () => { };
 
     [SerializeField] private Dice _dicePrefab;
     [SerializeField] private int _diceInitCount = 2;// for test
@@ -72,4 +73,6 @@ public class DiceManager : Singelton<DiceManager>
         List<int> diceFaces = new List<int>() { firstDiceFace, secondDiceFace };
         Roll(diceFaces);
     }
+
+    public void InvokeOnDiceCollide() => OnDiceCollide.Invoke();//Play dice sound
 }

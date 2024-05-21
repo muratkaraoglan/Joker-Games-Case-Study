@@ -5,7 +5,8 @@ using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour
 {
-    public event Action OnMoveCompleteEvent = () => { };
+    public event Action<bool> OnMoveCompleteEvent = _ => { };
+    public event Action OnStepCompleteEvent = () => { };
     [SerializeField] protected float _moveTime = 1f;
     protected int _moveCount;
     protected Tile _currentTile;
@@ -35,12 +36,13 @@ public abstract class PlayerBase : MonoBehaviour
         _currentTile = _currentTile.Next;
         _currentTile.PlayInteractionAnimation();
         _moveCount--;
+        OnStepCompleteEvent.Invoke();
         if (_moveCount != 0) Move();
         else
         {
             Idle();
-            OnMoveCompleteEvent.Invoke();
-            _currentTile.GetPrize();
+            bool hasPrize = _currentTile.GetPrize();
+            OnMoveCompleteEvent.Invoke(hasPrize);
         }
     }
 

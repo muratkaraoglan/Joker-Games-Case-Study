@@ -14,7 +14,9 @@ public class Dice : MonoBehaviour
     private bool _delayedCheck;
     private bool _hasRotationStopped;
     private bool _isRiggedDice;
+    private bool _isAudioClipPlayed;
     private int _desiredFace = -1;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -24,6 +26,7 @@ public class Dice : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints.None;
         _delayedCheck = true;
         _hasRotationStopped = false;
+        _isAudioClipPlayed = false;
     }
 
     private void Update()
@@ -54,8 +57,8 @@ public class Dice : MonoBehaviour
             }
         }
         _result.Invoke(currentSideIndex + 1);
-        _rigidbody.velocity= Vector3.zero;
-        _rigidbody.angularVelocity= Vector3.zero;
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
     }
 
     public void Throw(Vector3 forceDirection, float throwForce, float rollForce, int desiredDiceFace, Action<int> onRollStopped)
@@ -98,14 +101,21 @@ public class Dice : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (_isRiggedDice)
+
+        if (!collision.transform.TryGetComponent(out Dice dice))
         {
-            if (!collision.collider.name.Contains("Dice"))
+            if (_isRiggedDice)
             {
                 StartCoroutine(FromToRotation(DesiredFaceToRotation(_desiredFace)));
-                _isRiggedDice = false;
+              
+            }
+            if (!_isAudioClipPlayed)
+            {
+                _isAudioClipPlayed = true;
+                DiceManager.Instance.InvokeOnDiceCollide();
             }
         }
+
     }
     IEnumerator FromToRotation(Quaternion targetRotation)
     {
@@ -121,6 +131,7 @@ public class Dice : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime * 360);
             yield return null;
 
-        }    
+        }
+        _isRiggedDice = false;
     }
 }

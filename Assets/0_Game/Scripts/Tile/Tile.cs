@@ -59,11 +59,12 @@ public class Tile : MonoBehaviour
 
     public Tile Next => _nextTile;
 
-    public void GetPrize()
+    public bool GetPrize()
     {
-        if (_isEmpty) return;
+        if (_isEmpty) return false;
         _collectParticle.Play();
         DataManager.Instance.UpdateTileData(_type, _amount);
+        return true;
     }
 
     public void PlayInteractionAnimation()
