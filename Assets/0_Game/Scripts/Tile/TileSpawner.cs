@@ -15,7 +15,7 @@ public class TileSpawner : Singelton<TileSpawner>
     Vector3[] spawnDirections = new Vector3[] { Vector3.forward, Vector3.right, Vector3.back, Vector3.left };
     private IEnumerator Start()
     {
-        //transform.position = new Vector3(_tileCountOnEdge, 2f, _tileCountOnEdge);// for animation
+
         Vector3 targetPosition = Vector3.zero;
         Vector3 spawnOffset = Vector3.zero;
         Tile backTile = null;
@@ -46,7 +46,7 @@ public class TileSpawner : Singelton<TileSpawner>
                 else
                 {
                     firstTile = tile;
-                    firstTile.Reset();//Starting tile set empty
+                    //firstTile.Reset();//Starting tile set empty
                 }
                 backTile = tile;
                 yield return new WaitForSeconds(.1f);

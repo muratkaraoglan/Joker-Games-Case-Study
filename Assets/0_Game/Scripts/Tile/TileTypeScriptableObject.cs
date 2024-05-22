@@ -8,9 +8,9 @@ public class TileTypeScriptableObject : ScriptableObject
 {
     [field: SerializeField] public Tile TilePrefab { get; private set; }
     [field: SerializeField] public float TileSpawnOffset { get; private set; }
-    [field: SerializeField, Min(2)] public int TileCountOnEdge { get; private set; }
-
-
+    [field: SerializeField, Range(6, 10)] public int TileCountOnEdge { get; private set; }
+    [field: SerializeField] public ParticleSystem BeginningTileParticle { get; private set; }
+    [field: SerializeField, Min(1)] public int BeginningTilePrize { get; private set; }
     [SerializeField] private List<TileTypeHolder> _tileTypes;
 
     public TileTypeHolder GetRandomTile()

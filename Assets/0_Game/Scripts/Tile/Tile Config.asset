@@ -16,6 +16,9 @@ MonoBehaviour:
     type: 3}
   <TileSpawnOffset>k__BackingField: 2.15
   <TileCountOnEdge>k__BackingField: 6
+  <BeginningTileParticle>k__BackingField: {fileID: 1975110432286804683, guid: 8f1a941b8e2cf0040bc29608fbc1ea3e,
+    type: 3}
+  <BeginningTilePrize>k__BackingField: 5
   _tileTypes:
   - Name: Empty
     Type: 0

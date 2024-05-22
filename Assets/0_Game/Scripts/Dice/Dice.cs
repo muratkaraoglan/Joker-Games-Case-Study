@@ -45,6 +45,14 @@ public class Dice : MonoBehaviour
     {
         if (_diceSides.Length == 0) return;
 
+        if (_desiredFace != -1)
+        {
+            _result.Invoke(_desiredFace);
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            return;
+        }
+
         var currentSideIndex = 0;
         float currentY = _diceSides[0].position.y;
 
@@ -132,6 +140,6 @@ public class Dice : MonoBehaviour
             yield return null;
 
         }
-      
+
     }
 }

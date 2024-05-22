@@ -62,7 +62,7 @@ public class DiceManager : Singelton<DiceManager>
             dice.transform.position = transform.position;
             dice.transform.rotation = Quaternion.identity;
             dice.gameObject.SetActive(true);
-            dice.Throw(transform.forward.normalized, _throwForce, _rollForce, diceFaces[i], (r) => { AddResult(r); });
+            dice.Throw(transform.forward.normalized, _throwForce, _rollForce, diceFaces[Math.Min(diceFaces.Count - 1, i)], (r) => { AddResult(r); });
             await Task.Delay(10);
         }
         diceFaces = null;
