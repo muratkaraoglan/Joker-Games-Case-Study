@@ -10,7 +10,7 @@ public class DataManager : Singelton<DataManager>
 {
     private Data _data;
     private string _path;
-    public event Action<SlotData> OnSlotDataChanged = _ => { };
+    public event Action<SlotData, int> OnSlotDataChanged = (_, _) => { };
     protected override void Awake()
     {
         base.Awake();
@@ -61,7 +61,7 @@ public class DataManager : Singelton<DataManager>
         slot.Count += amount;
         slot.Count = Math.Max(slot.Count, 0);
         _data.slots[index] = slot;
-        OnSlotDataChanged.Invoke(slot);
+        OnSlotDataChanged.Invoke(slot, amount);
         SaveData();
     }
 }

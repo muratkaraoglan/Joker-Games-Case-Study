@@ -60,7 +60,6 @@ public class Tile : MonoBehaviour
         _amountText.SetText("");
         _isEmpty = true;
         _collectParticle = null;
-
     }
 
     public void SetNextTile(Tile nextTile)
@@ -72,15 +71,11 @@ public class Tile : MonoBehaviour
 
     public bool GetPrize()
     {
-
         if (_isEmpty) return false;
         _collectParticle.Play();
         DataManager.Instance.UpdateTileData(_type, _amount);
-
         return true;
     }
-
-
 
     public void PlayInteractionAnimation()
     {

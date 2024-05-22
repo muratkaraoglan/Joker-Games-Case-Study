@@ -34,8 +34,8 @@ public class InventoryManager : MonoBehaviour
         DataManager.Instance.OnSlotDataChanged -= OnSlotDataChanged;
     }
 
-    private void OnSlotDataChanged(SlotData slotData)
+    private void OnSlotDataChanged(SlotData slotData, int amount)
     {
-        slots[slotData.Type].UptadeItemCount(slotData.Count);
+        slots[slotData.Type].UptadeItemCount(slotData.Count, amount);
     }
 }

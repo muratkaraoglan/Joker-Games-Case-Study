@@ -42,7 +42,6 @@ public class UIManager : Singelton<UIManager>
     private void OnRollComplete(int moveCount)
     {
         print("UI roll Complete show roll count");
-        //Close Inventory
     }
 
     private void OnMoveCompleteEvent(bool hasPrize)
