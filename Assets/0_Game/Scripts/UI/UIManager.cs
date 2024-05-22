@@ -17,6 +17,9 @@ public class UIManager : Singelton<UIManager>
     [SerializeField] private GameObject _inputHolderGameObject;
     [SerializeField] private TextMeshProUGUI _firstDiceValueText;
     [SerializeField] private TextMeshProUGUI _secondDiceValueText;
+    [Header("Roll Result")]
+    [SerializeField] private Animator _rollResultAnimator;
+    [SerializeField] private TextMeshProUGUI _rollResultText;
 
     private PlayerBase _player;
     private int _playerIndex;
@@ -41,7 +44,8 @@ public class UIManager : Singelton<UIManager>
     }
     private void OnRollComplete(int moveCount)
     {
-        print("UI roll Complete show roll count");
+        _rollResultText.text= moveCount.ToString();
+        _rollResultAnimator.Play("FloatingText", -1, 0f);
     }
 
     private void OnMoveCompleteEvent(bool hasPrize)
