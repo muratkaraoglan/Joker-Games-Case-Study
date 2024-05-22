@@ -6,16 +6,27 @@ using UnityEngine;
 [DefaultExecutionOrder(-9)]
 public class TileSpawner : Singelton<TileSpawner>
 {
+    #region Event
     public event Action OnTileOrderFinished = () => { };
+    #endregion
 
+    #region Serialized
     [SerializeField] private TileTypeScriptableObject _tileConfig;
     [SerializeField] private float _tileSpawnMoveTargetTime = .3f;
+    #endregion
 
-    Tile firstTile = null;
-    Vector3[] spawnDirections = new Vector3[] { Vector3.forward, Vector3.right, Vector3.back, Vector3.left };
+    #region Private
+    private Tile firstTile = null;
+    private Vector3[] spawnDirections = new Vector3[]
+    {
+        Vector3.forward,
+        Vector3.right,
+        Vector3.back,
+        Vector3.left };
+    #endregion
+
     private IEnumerator Start()
     {
-
         Vector3 targetPosition = Vector3.zero;
         Vector3 spawnOffset = Vector3.zero;
         Tile backTile = null;
@@ -46,17 +57,16 @@ public class TileSpawner : Singelton<TileSpawner>
                 else
                 {
                     firstTile = tile;
-                    //firstTile.Reset();//Starting tile set empty
                 }
                 backTile = tile;
                 yield return new WaitForSeconds(.1f);
-
             }
+
             spawnOffset = targetPosition + spawnDirections[i] * _tileConfig.TileSpawnOffset;
         }
+
         backTile.SetNextTile(firstTile);
         OnTileOrderFinished.Invoke();
-
     }
 
     public Tile FirstTile => firstTile;

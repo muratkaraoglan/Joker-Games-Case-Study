@@ -7,15 +7,22 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Dice : MonoBehaviour
 {
-    [SerializeField] private Transform[] _diceSides;
-
+    #region Event
     private Action<int> _result;
+    #endregion
+
+    #region Serialized
+    [SerializeField] private Transform[] _diceSides;
+    #endregion
+
+    #region Private
     private Rigidbody _rigidbody;
     private bool _delayedCheck;
     private bool _hasRotationStopped;
     private bool _isRiggedDice;
     private bool _isAudioClipPlayed;
     private int _desiredFace = -1;
+    #endregion
 
     private void Awake()
     {
@@ -64,6 +71,7 @@ public class Dice : MonoBehaviour
                 currentSideIndex = i;
             }
         }
+
         _result.Invoke(currentSideIndex + 1);
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
@@ -109,7 +117,6 @@ public class Dice : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
         if (!collision.transform.TryGetComponent(out Dice dice))
         {
             if (_isRiggedDice)
@@ -123,8 +130,8 @@ public class Dice : MonoBehaviour
                 DiceManager.Instance.InvokeOnDiceCollide();
             }
         }
-
     }
+
     IEnumerator FromToRotation(Quaternion targetRotation)
     {
         yield return new WaitForSeconds(1f);
@@ -138,8 +145,6 @@ public class Dice : MonoBehaviour
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime * 360);
             yield return null;
-
         }
-
     }
 }

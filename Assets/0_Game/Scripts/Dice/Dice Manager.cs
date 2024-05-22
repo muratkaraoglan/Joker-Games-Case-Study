@@ -7,16 +7,22 @@ using System;
 [DefaultExecutionOrder(-1)]
 public class DiceManager : Singelton<DiceManager>
 {
+    #region Event
     public event Action<int> OnRollComplete = _ => { };
     public event Action OnDiceCollide = () => { };
+    #endregion
 
+    #region Serialized
     [SerializeField] private Dice _dicePrefab;
-    [SerializeField] private int _diceInitCount = 2;// for test
+    [SerializeField] private int _diceInitCount = 2;
     [SerializeField] private float _throwForce = 3;
     [SerializeField] private float _rollForce = 3;
+    #endregion
 
+    #region Private
     private List<int> _resultList = new List<int>();
     private List<Dice> _dicePool = new List<Dice>();
+    #endregion
 
     private void Start()
     {
@@ -33,7 +39,6 @@ public class DiceManager : Singelton<DiceManager>
 
         if (_resultList.Count == _diceInitCount)
         {
-            print("Result: " + _resultList.Sum());
             OnRollComplete.Invoke(_resultList.Sum());
             _resultList.Clear();
         }
@@ -44,7 +49,6 @@ public class DiceManager : Singelton<DiceManager>
         if (_dicePrefab == null) return;
 
         _dicePool.ForEach(dice => dice.gameObject.SetActive(false));
-        //_throwedDice.Clear();
 
         if (_diceInitCount > _dicePool.Count)
         {

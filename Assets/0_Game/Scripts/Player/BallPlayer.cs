@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class BallPlayer : PlayerBase
 {
+    #region Serialized
     [SerializeField] private Animator _animator;
     [SerializeField, Min(0.1f)] private float _jumpTime = .5f;
+    #endregion
+
     public override void Idle()
     {
         _animator.enabled = true;

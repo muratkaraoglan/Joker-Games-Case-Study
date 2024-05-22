@@ -7,8 +7,11 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class UIManager : Singelton<UIManager>
 {
+    #region Event
     public event Action<PlayerBase> OnPlayerSelectedEvent = _ => { };
+    #endregion
 
+    #region Serialized
     [SerializeField] private GameObject _throwButtonGameObject;
     [Header("Player Selection")]
     [SerializeField] private GameObject _playerSelectorGameObject;
@@ -20,9 +23,13 @@ public class UIManager : Singelton<UIManager>
     [Header("Roll Result")]
     [SerializeField] private Animator _rollResultAnimator;
     [SerializeField] private TextMeshProUGUI _rollResultText;
+    #endregion
 
+    #region Private
     private PlayerBase _player;
     private int _playerIndex;
+    #endregion
+
     private void OnEnable()
     {
         TileSpawner.Instance.OnTileOrderFinished += OnTileOrderFinished;
@@ -44,7 +51,7 @@ public class UIManager : Singelton<UIManager>
     }
     private void OnRollComplete(int moveCount)
     {
-        _rollResultText.text= moveCount.ToString();
+        _rollResultText.text = moveCount.ToString();
         _rollResultAnimator.Play("FloatingText", -1, 0f);
     }
 

@@ -5,11 +5,20 @@ using UnityEngine;
 
 public abstract class PlayerBase : MonoBehaviour
 {
+    #region Event
     public event Action<bool> OnMoveCompleteEvent = _ => { };
     public event Action OnStepCompleteEvent = () => { };
+    #endregion
+
+    #region Serialized
     [SerializeField] protected float _moveTime = 1f;
+    #endregion
+    
+    #region Protected
     protected int _moveCount;
     protected Tile _currentTile;
+    #endregion
+
     public abstract void Idle();
     public abstract void Move();
 

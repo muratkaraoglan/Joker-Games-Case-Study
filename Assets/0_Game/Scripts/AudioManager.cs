@@ -5,10 +5,15 @@ using System.Linq;
 
 public class AudioManager : MonoBehaviour
 {
+    #region Serialized
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private List<AudioClipHolder> _audioClips;
+    #endregion
 
+    #region Private
     private PlayerBase _player;
+    #endregion
+
     private void Start()
     {
         _audioSource.playOnAwake = false;

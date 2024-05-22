@@ -55,7 +55,6 @@ public class GameManager : Singelton<GameManager>
         }
     }
 
-
     private async void OnDiceCollide()
     {
         if (_isCameraShaking) return;
@@ -87,8 +86,10 @@ public class GameManager : Singelton<GameManager>
         _stringBuilder.Append(value);
         _stringBuilder.Append(_coloredStringEnd);
         return _stringBuilder.ToString();
-
     }
 
-
+    private void OnDisable()
+    {
+        DiceManager.Instance.OnDiceCollide-= OnDiceCollide;
+    }
 }

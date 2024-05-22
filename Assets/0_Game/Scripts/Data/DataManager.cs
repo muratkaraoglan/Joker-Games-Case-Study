@@ -8,9 +8,14 @@ using System.Linq;
 [DefaultExecutionOrder(-2)]
 public class DataManager : Singelton<DataManager>
 {
+    #region Event
+    public event Action<SlotData, int> OnSlotDataChanged = (_, _) => { };
+    #endregion
+
+    #region Private
     private Data _data;
     private string _path;
-    public event Action<SlotData, int> OnSlotDataChanged = (_, _) => { };
+    #endregion
     protected override void Awake()
     {
         base.Awake();

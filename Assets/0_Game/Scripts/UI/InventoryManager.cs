@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    #region Private
     [SerializeField] private Slot _slotPrefab;
+    #endregion
+
     Dictionary<TileType, Slot> slots = new Dictionary<TileType, Slot>();
     private void OnEnable()
     {
