@@ -13,7 +13,8 @@ public abstract class PlayerBase : MonoBehaviour
     #region Serialized
     [SerializeField] protected float _moveTime = 1f;
     #endregion
-    
+
+    private bool _isDouble;
     #region Protected
     protected int _moveCount;
     protected Tile _currentTile;
@@ -34,9 +35,10 @@ public abstract class PlayerBase : MonoBehaviour
         DiceManager.Instance.OnRollComplete += OnRollComplete;
     }
 
-    protected void OnRollComplete(int rollResult)
+    protected void OnRollComplete(int rollResult, bool isDouble)
     {
         _moveCount = rollResult;
+        _isDouble= isDouble;
         Move();
     }
 
@@ -44,14 +46,16 @@ public abstract class PlayerBase : MonoBehaviour
     {
         _currentTile = _currentTile.Next;
         _currentTile.PlayInteractionAnimation();
+        _currentTile.CheckFirtsTilePrize(_isDouble);
         _moveCount--;
         OnStepCompleteEvent.Invoke();
         if (_moveCount != 0) Move();
         else
         {
             Idle();
-            bool hasPrize = _currentTile.GetPrize();
+            bool hasPrize = _currentTile.GetPrize(_isDouble);
             OnMoveCompleteEvent.Invoke(hasPrize);
+            _isDouble = false;
         }
     }
 

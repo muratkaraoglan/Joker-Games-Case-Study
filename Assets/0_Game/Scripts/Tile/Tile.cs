@@ -69,30 +69,31 @@ public class Tile : MonoBehaviour
 
     public Tile Next => _nextTile;
 
-    public bool GetPrize()
+    public bool GetPrize(bool isDouble)
     {
         if (_isEmpty) return false;
         _collectParticle.Play();
-        DataManager.Instance.UpdateTileData(_type, _amount);
+        print("is double " + isDouble);
+        DataManager.Instance.UpdateTileData(_type, isDouble ? _amount * 2 : _amount);
         return true;
     }
 
     public void PlayInteractionAnimation()
     {
         _animator.Play("Interaction", -1, 0f);
-        CheckFirtsTilePrize();
     }
 
-    private void CheckFirtsTilePrize()
+    public void CheckFirtsTilePrize(bool isDouble)
     {
         if (_id == 1)
         {
+            int prize = isDouble ? TileSpawner.Instance.TileConfig.BeginningTilePrize * 2 : TileSpawner.Instance.TileConfig.BeginningTilePrize;
             _collectParticle.Play();
 
             for (int i = 0; i < TileSpawner.Instance.TileConfig.TileTypeHolderList.Count; i++)
             {
                 if (TileSpawner.Instance.TileConfig.TileTypeHolderList[i].Type == TileType.Empty) continue;
-                DataManager.Instance.UpdateTileData(TileSpawner.Instance.TileConfig.TileTypeHolderList[i].Type, TileSpawner.Instance.TileConfig.BeginningTilePrize);
+                DataManager.Instance.UpdateTileData(TileSpawner.Instance.TileConfig.TileTypeHolderList[i].Type, prize);
             }
         }
     }

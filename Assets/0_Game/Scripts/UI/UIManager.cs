@@ -49,9 +49,9 @@ public class UIManager : Singelton<UIManager>
         _playerParentTransform.gameObject.SetActive(true);
 
     }
-    private void OnRollComplete(int moveCount)
+    private void OnRollComplete(int moveCount, bool isDouble)
     {
-        _rollResultText.text = moveCount.ToString();
+        _rollResultText.text = moveCount.ToString() + (isDouble ? "\nx2 Prize" : "");
         _rollResultAnimator.Play("FloatingText", -1, 0f);
     }
 

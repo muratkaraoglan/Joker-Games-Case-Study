@@ -8,7 +8,7 @@ using System;
 public class DiceManager : Singelton<DiceManager>
 {
     #region Event
-    public event Action<int> OnRollComplete = _ => { };
+    public event Action<int, bool> OnRollComplete = (_, _) => { };
     public event Action OnDiceCollide = () => { };
     #endregion
 
@@ -39,7 +39,10 @@ public class DiceManager : Singelton<DiceManager>
 
         if (_resultList.Count == _diceInitCount)
         {
-            OnRollComplete.Invoke(_resultList.Sum());
+            int firstFace = _resultList[0];
+            bool isDouble = _resultList.Count(c => c == firstFace) == _resultList.Count;
+
+            OnRollComplete.Invoke(_resultList.Sum(), isDouble);
             _resultList.Clear();
         }
     }
