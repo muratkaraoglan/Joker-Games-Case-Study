@@ -23,11 +23,12 @@ public class Tile : MonoBehaviour
     private int _id;
     private int _amount;
     #endregion
-    public void Init(TileTypeHolder tileTypeHolder, Vector3 direction, int id, bool isFirstTileInRow)
+    public (TileType, int) Init(TileTypeHolder tileTypeHolder, Vector3 direction, int id, bool isFirstTileInRow)
     {
         _canvasParent.forward = direction;
         _indexText.SetText(id.ToString());
         _id = id;
+        _animator = GetComponent<Animator>();
 
         if (isFirstTileInRow) _indexText.rectTransform.anchoredPosition = new Vector2(-.8f, .3f);
 
@@ -38,7 +39,9 @@ public class Tile : MonoBehaviour
             {
                 _collectParticle = Instantiate(TileSpawner.Instance.TileConfig.BeginningTileParticle, transform);
                 _amount = TileSpawner.Instance.TileConfig.BeginningTilePrize;
+
             }
+            return (TileType.Empty, 0);
         }
         else
         {
@@ -48,9 +51,9 @@ public class Tile : MonoBehaviour
             _amount = Random.Range(tileTypeHolder.MinAmount, tileTypeHolder.MaxAmount + 1);
             _amountText.SetText(GameManager.Instance.GetColoredString(_amount));
             _collectParticle = Instantiate(tileTypeHolder.TileCollectParticlePrefab, transform);
-        }
-        _animator = GetComponent<Animator>();
 
+            return (_type, _amount);
+        }
     }
 
     public void Reset()
@@ -73,7 +76,6 @@ public class Tile : MonoBehaviour
     {
         if (_isEmpty) return false;
         _collectParticle.Play();
-        print("is double " + isDouble);
         DataManager.Instance.UpdateTileData(_type, isDouble ? _amount * 2 : _amount);
         return true;
     }

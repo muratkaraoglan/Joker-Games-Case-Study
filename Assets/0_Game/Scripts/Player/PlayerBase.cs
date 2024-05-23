@@ -25,11 +25,11 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-
         _currentTile = TileSpawner.Instance.FirstTile;
         transform.position = _currentTile.TileMovePoint.position;
         Idle();
     }
+
     private void OnEnable()
     {
         DiceManager.Instance.OnRollComplete += OnRollComplete;
@@ -38,7 +38,10 @@ public abstract class PlayerBase : MonoBehaviour
     protected void OnRollComplete(int rollResult, bool isDouble)
     {
         _moveCount = rollResult;
-        _isDouble= isDouble;
+        _isDouble = isDouble;
+        print("Move Count Before: " + _moveCount);
+        TileSpawner.Instance.CheckNumberOfTurns(ref _moveCount, _isDouble);
+        print("Move Count After: " + _moveCount);
         Move();
     }
 
