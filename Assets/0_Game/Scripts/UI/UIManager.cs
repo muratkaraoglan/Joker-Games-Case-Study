@@ -3,23 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
+[DefaultExecutionOrder(-2)]
 public class UIManager : Singelton<UIManager>
 {
     #region Event
     public event Action<PlayerBase> OnPlayerSelectedEvent = _ => { };
+    public event Action<int> OnDiceCountChanged = _ => { };
     #endregion
 
     #region Serialized
+    [Header("Dice Settings")]
+    [SerializeField] private TMP_Dropdown _diceCountDropDown;
+    [SerializeField] private int _maxDiceCount = 50;
+    [SerializeField] private DiceInputValueManager _diceInputValueManager;
+    [SerializeField] private GameObject _inputHolderGameObject;
+    [SerializeField] private GameObject _diceCountDropDownParentGameObject;
+
+    [Header("Throw Button")]
     [SerializeField] private GameObject _throwButtonGameObject;
+
     [Header("Player Selection")]
     [SerializeField] private GameObject _playerSelectorGameObject;
     [SerializeField] private Transform _playerParentTransform;
-    [Header("Dice Input")]
-    [SerializeField] private GameObject _inputHolderGameObject;
-    [SerializeField] private TextMeshProUGUI _firstDiceValueText;
-    [SerializeField] private TextMeshProUGUI _secondDiceValueText;
+
     [Header("Roll Result")]
     [SerializeField] private Animator _rollResultAnimator;
     [SerializeField] private TextMeshProUGUI _rollResultText;
@@ -30,10 +37,26 @@ public class UIManager : Singelton<UIManager>
     private int _playerIndex;
     #endregion
 
+    protected override void Awake()
+    {
+        base.Awake();
+        _diceCountDropDown.options.Clear();
+        List<TMP_Dropdown.OptionData> optionDataList = new List<TMP_Dropdown.OptionData>();
+        for (int i = 0; i < _maxDiceCount; i++)
+        {
+            TMPro.TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData();
+            option.text = (i + 1).ToString();
+            optionDataList.Add(option);
+        }
+        _diceCountDropDown.AddOptions(optionDataList);
+        _diceCountDropDown.onValueChanged.AddListener(v => OnDropDownValueChanged(v));
+        _diceCountDropDown.value = 0;
+        _diceInputValueManager.Init(_maxDiceCount);
+    }
+
     private void OnEnable()
     {
         TileSpawner.Instance.OnTileOrderFinished += OnTileOrderFinished;
-        DiceManager.Instance.OnRollComplete += OnRollComplete;
     }
 
     private void OnDisable()
@@ -41,6 +64,11 @@ public class UIManager : Singelton<UIManager>
         TileSpawner.Instance.OnTileOrderFinished -= OnTileOrderFinished;
         DiceManager.Instance.OnRollComplete -= OnRollComplete;
         _player.OnMoveCompleteEvent -= OnMoveCompleteEvent;
+    }
+
+    private void OnDropDownValueChanged(int index)
+    {
+        OnDiceCountChanged.Invoke(index + 1);
     }
 
     private void OnTileOrderFinished()
@@ -63,26 +91,27 @@ public class UIManager : Singelton<UIManager>
     public void OnRollButtonClicked()
     {
         _throwButtonGameObject.SetActive(false);
-        int first, second;
-
-        first = _firstDiceValueText.text[0] - '0';
-        second = _secondDiceValueText.text[0] - '0';
-        first = first > 6 ? -1 : first;
-        second = second > 6 ? -1 : second;
-
-        DiceManager.Instance.DiceRoll(first, second);
+        DiceManager.Instance.DiceRoll(_diceInputValueManager.GetActiveRiggedDiceValues());
     }
 
     public void OnPlayerSelected()
     {
-        _playerSelectorGameObject.SetActive(false);
         _throwButtonGameObject.SetActive(true);
+        _playerSelectorGameObject.SetActive(false);
+
         _player = _playerParentTransform.GetChild(_playerIndex).GetComponent<PlayerBase>();
         _player.OnMoveCompleteEvent += OnMoveCompleteEvent;
         _playerParentTransform.GetChild(_playerIndex).SetParent(null);
+
         _inputHolderGameObject.SetActive(true);
+        _diceCountDropDownParentGameObject.SetActive(true);
+
         Destroy(_playerParentTransform.gameObject);
         OnPlayerSelectedEvent.Invoke(_player);
+
+        DiceManager.Instance.OnRollComplete += OnRollComplete;
+
+        _diceCountDropDown.onValueChanged.Invoke(_diceCountDropDown.value);
     }
 
     public void PlayerSelectDirectionButtonClicked(int direction)

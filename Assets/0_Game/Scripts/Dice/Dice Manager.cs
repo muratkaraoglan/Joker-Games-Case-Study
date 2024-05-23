@@ -26,11 +26,23 @@ public class DiceManager : Singelton<DiceManager>
 
     private void Start()
     {
-        for (int i = 0; i < _diceInitCount; i++)
-        {
-            Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
-            _dicePool.Add(dice);
-        }
+
+        //for (int i = 0; i < _diceInitCount; i++)
+        //{
+        //    Dice dice = Instantiate(_dicePrefab, transform.position, Quaternion.identity);
+        //    _dicePool.Add(dice);
+        //}
+        UIManager.Instance.OnDiceCountChanged += OnDiceCountChanged;
+    }
+
+    private void OnDisable()
+    {
+        UIManager.Instance.OnDiceCountChanged -= OnDiceCountChanged;
+    }
+
+    private void OnDiceCountChanged(int diceCount)
+    {
+        _diceInitCount = diceCount;
     }
 
     void AddResult(int result)
@@ -40,7 +52,7 @@ public class DiceManager : Singelton<DiceManager>
         if (_resultList.Count == _diceInitCount)
         {
             int firstFace = _resultList[0];
-            bool isDouble = _resultList.Count(c => c == firstFace) == _resultList.Count;
+            bool isDouble = _resultList.Count(c => c == firstFace) == _resultList.Count && _resultList.Count != 1;
 
             OnRollComplete.Invoke(_resultList.Sum(), isDouble);
             _resultList.Clear();
@@ -69,15 +81,14 @@ public class DiceManager : Singelton<DiceManager>
             dice.transform.position = transform.position;
             dice.transform.rotation = Quaternion.identity;
             dice.gameObject.SetActive(true);
-            dice.Throw(transform.forward.normalized, _throwForce, _rollForce, diceFaces[Math.Min(diceFaces.Count - 1, i)], (r) => { AddResult(r); });
+            dice.Throw(transform.forward.normalized, _throwForce, _rollForce, diceFaces[i], (r) => { AddResult(r); });
             await Task.Delay(10);
         }
         diceFaces = null;
 
     }
-    public void DiceRoll(int firstDiceFace, int secondDiceFace)
+    public void DiceRoll(List<int> diceFaces)
     {
-        List<int> diceFaces = new List<int>() { firstDiceFace, secondDiceFace };
         Roll(diceFaces);
     }
 
